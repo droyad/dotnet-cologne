@@ -150,3 +150,26 @@ resource "aws_security_group" "main" {
     Lifetime = "May-2018"
   }
 }
+
+resource "aws_elb" "test_elb" {
+  name = "Test-elb",
+  availability_zones = ["eu-central-1a"],
+  listener {
+    instance_port = 80
+    instance_protocol = "tcp"
+    lb_port = 80
+    lb_protocol = "tcp"
+  }
+}
+
+
+resource "aws_elb" "production_elb" {
+  name = "Production-elb",
+  availability_zones = ["eu-central-1a"],
+  listener {
+    instance_port = 80
+    instance_protocol = "tcp"
+    lb_port = 80
+    lb_protocol = "tcp"
+  }
+}
