@@ -66,35 +66,15 @@ resource "aws_route_table_association" "public_a" {
   route_table_id = "${aws_route_table.public.id}"
 }
 
-resource "aws_nat_gateway" "public_a" {
-  allocation_id = "${aws_eip.public_a.id}"
-  subnet_id     = "${aws_subnet.public_a.id}"
-
-  tags {
-    Name = "Production NAT Gateway (Public A)",
-    OwnerContact = "droyad",
-    Environment = "Production",
-    Lifetime = "May-2018"
-  }
-}
 
 resource "aws_default_network_acl" "main" {
   default_network_acl_id = "${aws_vpc.main.default_network_acl_id}"
   subnet_ids = ["${aws_subnet.public_a.id}"]
   ingress {
     rule_no = 100
-    protocol = "tcp"
-    from_port = 22
-    to_port = 22
-    cidr_block = "0.0.0.0/0"
-    action = "allow"
-  }
-
-  ingress {
-    rule_no = 200
-    protocol = "tcp"
-    from_port = 80
-    to_port = 80
+    protocol = -1
+    from_port = 0
+    to_port = 0
     cidr_block = "0.0.0.0/0"
     action = "allow"
   }
