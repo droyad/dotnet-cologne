@@ -153,7 +153,8 @@ resource "aws_security_group" "main" {
 
 resource "aws_elb" "test_elb" {
   name = "Test-elb",
-  availability_zones = ["eu-central-1a"],
+  subnets = ["${aws_subnet.public_a.id}"],
+
   listener {
     instance_port = 80
     instance_protocol = "tcp"
@@ -165,7 +166,7 @@ resource "aws_elb" "test_elb" {
 
 resource "aws_elb" "production_elb" {
   name = "Production-elb",
-  availability_zones = ["eu-central-1a"],
+  subnets = ["${aws_subnet.public_a.id}"],
   listener {
     instance_port = 80
     instance_protocol = "tcp"

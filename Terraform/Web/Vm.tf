@@ -20,6 +20,11 @@ variable "environmentId" {
   default = "Environments-1"
 }
 
+variable "environmentName" {
+  type    = "string"
+  default = "Development"
+}
+
 variable "apiKey" {
   type    = "string"
   default = "API-V0DIUWFKBIIJ9YAB0IGFKHVIGJY"
@@ -55,12 +60,9 @@ resource "aws_instance" "web" {
   vpc_security_group_ids = ["${data.aws_security_group.main.id}"]
   user_data              = "${data.template_file.user_data.rendered}"
 
-  lifecycle {
-    create_before_destroy = true
-  }
-
   tags {
-    Name       = "Test WebServer 2"
+    Name       = "${var.environmentName} WebServer"
     Deployment = "${var.deploymentId}"
+    Environment = "${var.environmentName}"
   }
 }
