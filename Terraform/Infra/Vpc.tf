@@ -134,6 +134,7 @@ resource "aws_security_group" "main" {
 resource "aws_elb" "test_elb" {
   name = "Test-elb",
   subnets = ["${aws_subnet.public_a.id}"],
+  security_groups = ["${aws_security_group.main.id}"]
 
   listener {
     instance_port = 80
@@ -147,6 +148,7 @@ resource "aws_elb" "test_elb" {
 resource "aws_elb" "production_elb" {
   name = "Production-elb",
   subnets = ["${aws_subnet.public_a.id}"],
+  security_groups = ["${aws_security_group.main.id}"]
   listener {
     instance_port = 80
     instance_protocol = "tcp"

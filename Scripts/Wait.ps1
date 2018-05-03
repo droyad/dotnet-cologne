@@ -1,10 +1,21 @@
-﻿$deployment = $OctopusParameters["Octopus.Deployment.Id"]
+﻿Install-Module -Name Octoposh -force
+Import-Module Octoposh -Force
+Set-OctopusConnectionInfo -URL "https://cologne.octopushq.com" -APIKey $OctopusParameters["OctopusApiKey"]
+
+$deployment = $OctopusParameters["Octopus.Deployment.Id"]
 
 $sw = [System.Diagnostics.StopWatch]::Startnew()
 $instances = Get-Ec2Instance | % { $_.Instances }
 
-$ready = $false
-while($ready -ne $true)
+function IsThisDeployment($instance)
+{
+    $deploymentTag = $instance.Tag | where { $_.Key -eq "Deployment" } | Select -First 1
+    return $deploymentTag.Value -eq $deployment
+}
+
+$instanceIds = $instances | where IsThisDeployment | select { $_.InstanceId }
+
+while($true)
 {
     if($sw.Elapsed.TotalMinutes -gt 4)
     {
@@ -12,22 +23,12 @@ while($ready -ne $true)
     }
 
     start-sleep 1
-    $statuses = Get-EC2InstanceStatus
-    $ready = $true;
+   
+    $machines = Get-OctopusMachine -EnvironmentName $OctopusParameters["Octopus.Environment.Name"]
+    Write-Host "$($machines.Count) of $($instanceIds.Count) machines registered with Octopus"
 
-    foreach($instance in $instances)
+    if($machines.Count -ge $instanceIds.Count)
     {
-        $deploymentTag = $instance.Tag | where { $_.Key -eq "Deployment" } | Select -First 1
-
-        if($deploymentTag.Value -eq $deployment)
-        {
-            $status = $statuses | where { $_.InstanceId -eq $instance.InstanceId } | select -First 1
-            Write-Host "$($instance.InstanceId) is $($status.Status.Status)"
-
-            if($status -ne $null -and $status.Status.Status -ne "ok")
-            {
-               $ready = $false
-            }
-        }
+        return;
     }
 }

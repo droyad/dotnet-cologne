@@ -25,7 +25,7 @@ foreach($instance in $instancesToAdd)
     }
     elseif($registered)
     {
-        Write-Host "Removing $($instance.InstanceId) from the Load Balancer as it belongs to a different deployment $($deploymentTag.Value)"
+        Write-Highlight "Removing $($instance.InstanceId) from the Load Balancer as it belongs to a different deployment $($deploymentTag.Value)"
         Remove-ELBInstanceFromLoadBalancer $elb.LoadBalancerName $instance.InstanceId -Force > $null
     }
 }
