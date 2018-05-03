@@ -38,9 +38,10 @@ namespace Hello
             {
                 var name = configuration["name"];
                 var machine = configuration["machine"];
-                var deployment = configuration["macdeploymenthine"];
+                var machine = configuration["environment"];
+                var deployment = configuration["deployment"];
                 context.Response.ContentType = "text/plain; charset=utf-8";
-                await context.Response.WriteAsync($"Griaß di {name} und Köln\r\nI am running on {machine}\r\nVersion {typeof(Startup).Assembly.GetName().Version}\r\nDeployment {deployment}", Encoding.UTF8);
+                await context.Response.WriteAsync($"Griaß di {name} und Köln\r\nI am {environment} running on {machine}\r\nVersion {typeof(Startup).Assembly.GetName().Version}\r\nDeployment {deployment}", Encoding.UTF8);
             });
         }
     }
