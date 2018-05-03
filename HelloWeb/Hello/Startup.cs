@@ -37,8 +37,10 @@ namespace Hello
             app.Run(async (context) =>
             {
                 var name = configuration["name"];
+                var machine = configuration["machine"];
+                var deployment = configuration["macdeploymenthine"];
                 context.Response.ContentType = "text/plain; charset=utf-8";
-                await context.Response.WriteAsync($"Griaß di {name} und Köln\r\nI am running on {Environment.MachineName}\r\nVersion {typeof(Startup).Assembly.GetName().Version}", Encoding.UTF8);
+                await context.Response.WriteAsync($"Griaß di {name} und Köln\r\nI am running on {machine}\r\nVersion {typeof(Startup).Assembly.GetName().Version}\r\nDeployment {deployment}", Encoding.UTF8);
             });
         }
     }
