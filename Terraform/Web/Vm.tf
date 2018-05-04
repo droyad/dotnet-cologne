@@ -53,7 +53,7 @@ data "aws_security_group" "main" {
 
 
 resource "aws_instance" "web" {
-  ami                    = "ami-e62d0b0d"
+  ami                    = "ami-7103209a"
   instance_type          = "t2.small"
   key_name = "RobW-Frankfurt"
   subnet_id              = "${data.aws_subnet.public_a.id}"                # Management Private A
